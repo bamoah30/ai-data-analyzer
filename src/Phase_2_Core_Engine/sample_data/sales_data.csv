@@ -1,0 +1,21 @@
+Employee_ID,Name,Age,Department,Salary,Experience,Bonus,Performance_Score,Hire_Date
+E001,John Smith,28,Sales,45000,2,2000,85,2022-03-15
+E002,Sarah Johnson,35,Engineering,78000,7,6500,92,2018-01-20
+E003,Michael Brown,42,Marketing,65000,12,4500,88,2013-06-10
+E004,Emily Davis,31,Sales,52000,4,3200,79,2020-08-05
+E005,David Wilson,45,Engineering,95000,15,9000,95,2010-02-14
+E006,Lisa Anderson,29,HR,48000,3,2800,82,2021-11-30
+E007,Robert Taylor,38,Marketing,70000,10,5500,90,2015-04-22
+E008,Jennifer Martinez,33,Engineering,82000,8,7200,91,2017-09-18
+E009,William Garcia,50,Sales,58000,18,4000,83,2007-12-01
+E010,Amanda Rodriguez,27,HR,46000,2,2500,80,2022-05-12
+E011,James Lee,36,Engineering,85000,9,7500,93,2016-07-25
+E012,Maria Hernandez,41,Marketing,68000,13,5000,87,2012-10-08
+E013,Christopher White,30,Sales,50000,3,3000,81,2021-03-17
+E014,Patricia Lewis,44,Engineering,92000,16,8500,94,2009-08-29
+E015,Daniel Walker,32,HR,51000,5,3500,84,2019-12-15
+E016,Linda Hall,39,Marketing,72000,11,5800,89,2014-05-20
+E017,Matthew Allen,26,Sales,43000,1,1800,78,2023-01-09
+E018,Barbara Young,37,Engineering,80000,10,7000,90,2015-11-03
+E019,Joseph King,48,Marketing,75000,17,6200,86,2008-03-28
+E020,Susan Wright,34,HR,53000,6,4000,85,2018-09-14

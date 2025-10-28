@@ -1,0 +1,134 @@
+[
+  {
+    "Customer_ID": "C001",
+    "Name": "Alice Thompson",
+    "Age": 32,
+    "City": "New York",
+    "Purchase_Amount": 1250.50,
+    "Items_Purchased": 5,
+    "Member_Since": "2020-01-15",
+    "Loyalty_Points": 3400,
+    "Last_Purchase_Date": "2025-10-20"
+  },
+  {
+    "Customer_ID": "C002",
+    "Name": "Bob Martinez",
+    "Age": 45,
+    "City": "Los Angeles",
+    "Purchase_Amount": 890.25,
+    "Items_Purchased": 3,
+    "Member_Since": "2019-06-22",
+    "Loyalty_Points": 5600,
+    "Last_Purchase_Date": "2025-10-15"
+  },
+  {
+    "Customer_ID": "C003",
+    "Name": "Carol Davis",
+    "Age": 28,
+    "City": "Chicago",
+    "Purchase_Amount": 2100.75,
+    "Items_Purchased": 8,
+    "Member_Since": "2021-03-10",
+    "Loyalty_Points": 2800,
+    "Last_Purchase_Date": "2025-10-25"
+  },
+  {
+    "Customer_ID": "C004",
+    "Name": "David Chen",
+    "Age": 38,
+    "City": "San Francisco",
+    "Purchase_Amount": 3500.00,
+    "Items_Purchased": 12,
+    "Member_Since": "2018-11-05",
+    "Loyalty_Points": 8900,
+    "Last_Purchase_Date": "2025-10-22"
+  },
+  {
+    "Customer_ID": "C005",
+    "Name": "Emma Wilson",
+    "Age": 52,
+    "City": "Boston",
+    "Purchase_Amount": 675.30,
+    "Items_Purchased": 2,
+    "Member_Since": "2017-09-18",
+    "Loyalty_Points": 12000,
+    "Last_Purchase_Date": "2025-10-10"
+  },
+  {
+    "Customer_ID": "C006",
+    "Name": "Frank Rodriguez",
+    "Age": 29,
+    "City": "Miami",
+    "Purchase_Amount": 1450.80,
+    "Items_Purchased": 6,
+    "Member_Since": "2022-02-14",
+    "Loyalty_Points": 1900,
+    "Last_Purchase_Date": "2025-10-18"
+  },
+  {
+    "Customer_ID": "C007",
+    "Name": "Grace Lee",
+    "Age": 41,
+    "City": "Seattle",
+    "Purchase_Amount": 980.50,
+    "Items_Purchased": 4,
+    "Member_Since": "2020-07-30",
+    "Loyalty_Points": 4200,
+    "Last_Purchase_Date": "2025-10-12"
+  },
+  {
+    "Customer_ID": "C008",
+    "Name": "Henry Taylor",
+    "Age": 35,
+    "City": "Denver",
+    "Purchase_Amount": 2750.25,
+    "Items_Purchased": 10,
+    "Member_Since": "2019-12-08",
+    "Loyalty_Points": 6700,
+    "Last_Purchase_Date": "2025-10-24"
+  },
+  {
+    "Customer_ID": "C009",
+    "Name": "Isabel Garcia",
+    "Age": 26,
+    "City": "Austin",
+    "Purchase_Amount": 540.00,
+    "Items_Purchased": 2,
+    "Member_Since": "2023-05-20",
+    "Loyalty_Points": 800,
+    "Last_Purchase_Date": "2025-10-08"
+  },
+  {
+    "Customer_ID": "C010",
+    "Name": "Jack Anderson",
+    "Age": 48,
+    "City": "Portland",
+    "Purchase_Amount": 1875.90,
+    "Items_Purchased": 7,
+    "Member_Since": "2018-04-12",
+    "Loyalty_Points": 9500,
+    "Last_Purchase_Date": "2025-10-21"
+  },
+  {
+    "Customer_ID": "C011",
+    "Name": "Karen White",
+    "Age": 33,
+    "City": "Phoenix",
+    "Purchase_Amount": 1200.00,
+    "Items_Purchased": 5,
+    "Member_Since": "2021-08-25",
+    "Loyalty_Points": 3100,
+    "Last_Purchase_Date": "2025-10-19"
+  },
+  {
+    "Customer_ID": "C012",
+    "Name": "Leo Brown",
+    "Age": 56,
+    "City": "Philadelphia",
+    "Purchase_Amount": 425.75,
+    "Items_Purchased": 1,
+    "Member_Since": "2016-10-30",
+    "Loyalty_Points": 15000,
+    "Last_Purchase_Date": "2025-10-05"
+  }
+]
