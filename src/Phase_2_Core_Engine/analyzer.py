@@ -10,11 +10,18 @@ Key features:
 - Returns formatted AI-generated insights
 - Configurable model selection (default: gpt-3.5-turbo)
 - Robust error handling for API issues
+- Loads API key from .env file or environment variables
 - Typical response time: 2-5 seconds
 """
 
 from openai import OpenAI
+from dotenv import load_dotenv
 import os
+from typing import Optional, List
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, temperature=0.7):
@@ -23,7 +30,7 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
     
     Args:
         prompt (str): The structured prompt to send to OpenAI
-        api_key (str, optional): OpenAI API key. If None, reads from OPENAI_API_KEY env variable
+        api_key (str, optional): OpenAI API key. If None, reads from OPENAI_API_KEY env variable or .env file
         model (str, optional): OpenAI model to use (default: "gpt-3.5-turbo")
                               Other options: "gpt-4", "gpt-4-turbo-preview"
         max_tokens (int, optional): Maximum tokens in the response (default: 1000)
@@ -48,7 +55,8 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
     if not api_key:
         raise ValueError(
             "OpenAI API key is required. Either pass it as an argument or set the "
-            "OPENAI_API_KEY environment variable."
+            "OPENAI_API_KEY environment variable. You can also create a .env file "
+            "in your project root with: OPENAI_API_KEY=your-key-here"
         )
     
     try:
@@ -77,10 +85,12 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
             temperature=temperature
         )
         
-        # Extract the insights from the response
-        insights = response.choices[0].message.content.strip()
-        
-        return insights
+        # Extract the insights from the response with safety check
+        if response.choices and len(response.choices) > 0 and response.choices[0].message.content:
+            insights = response.choices[0].message.content.strip()
+            return insights
+        else:
+            raise Exception("No content received from OpenAI API. The response was empty or malformed.")
     
     except Exception as e:
         # Provide helpful error messages for common issues
@@ -105,7 +115,7 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
             raise Exception(f"OpenAI API error: {error_message}")
 
 
-def get_insights_with_history(prompt, api_key=None, conversation_history=None, model="gpt-3.5-turbo"):
+def get_insights_with_history(prompt: str, api_key: Optional[str]=None, conversation_history:Optional[List]=None, model="gpt-3.5-turbo"):
     """
     Send a prompt with conversation history for follow-up questions.
     
@@ -150,18 +160,22 @@ def get_insights_with_history(prompt, api_key=None, conversation_history=None, m
             messages=conversation_history
         )
         
-        insights = response.choices[0].message.content.strip()
-        
-        # Add assistant's response to history
-        conversation_history.append({"role": "assistant", "content": insights})
-        
-        return insights, conversation_history
+        # Safety check before calling strip()
+        if response.choices and len(response.choices) > 0 and response.choices[0].message.content:
+            insights = response.choices[0].message.content.strip()
+            
+            # Add assistant's response to history
+            conversation_history.append({"role": "assistant", "content": insights})
+            
+            return insights, conversation_history
+        else:
+            raise Exception("No content received from OpenAI API.")
     
     except Exception as e:
         raise Exception(f"OpenAI API error: {str(e)}")
 
 
-def estimate_cost(prompt, model="gpt-3.5-turbo"):
+def estimate_cost(prompt:str, model:str="gpt-3.5-turbo"):
     """
     Estimate the cost of analyzing a prompt.
     
@@ -241,12 +255,15 @@ Please provide insights on trends, correlations, and data quality."""
     
     if not api_key:
         print(" OPENAI_API_KEY not found in environment variables")
-        print(" To test this module, set your API key:")
-        print("export OPENAI_API_KEY=your-key-here")
-        print("\n Or create a .env file with:")
-        print("OPENAI_API_KEY=your-key-here")
+        print("\nTo test this module, set your API key in one of these ways:")
+        print("\n1. Environment variable:")
+        print("   export OPENAI_API_KEY=your-key-here")
+        print("\n2. Create a .env file in your project root with:")
+        print("   OPENAI_API_KEY=your-key-here")
+        print("\n3. Pass the API key directly to get_insights():")
+        print("   insights = get_insights(prompt, api_key='your-key-here')")
     else:
-        print("API key found")
+        print(" API key found")
         
         # Estimate cost
         cost_info = estimate_cost(sample_prompt)
@@ -260,8 +277,8 @@ Please provide insights on trends, correlations, and data quality."""
         
         if user_input.lower() == 'y':
             try:
-                print("\n🤖 Sending request to OpenAI...")
-                print("   (This may take 2-5 seconds)\n")
+                print("\nSending request to OpenAI...")
+                print("This may take 2-5 seconds\n")
                 
                 insights = get_insights(sample_prompt, api_key=api_key)
                 
