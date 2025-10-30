@@ -1,19 +1,21 @@
 """
-analyzer.py - Send prompts to OpenAI API and retrieve AI-generated insights
+analyzer.py - Send prompts to an AI API (Hugging Face or OpenAI) and retrieve AI-generated insights
 
-This module handles communication with the OpenAI API to generate data analysis
-insights from structured prompts. It uses GPT models to provide intelligent
-interpretations of dataset summaries.
+This module handles communication with AI APIs to generate data analysis
+insights from structured prompts. It supports both Hugging Face and OpenAI
+APIs, allowing users to choose their preferred provider.
 
 Key features:
-- Sends structured prompts to OpenAI API
+- Sends structured prompts to AI APIs
 - Returns formatted AI-generated insights
-- Configurable model selection (default: gpt-3.5-turbo)
+- Supports both Hugging Face (default, free) and OpenAI (paid)
+- Configurable model selection
 - Robust error handling for API issues
 - Loads API key from .env file or environment variables
 - Typical response time: 2-5 seconds
 """
 
+import requests
 from openai import OpenAI
 from dotenv import load_dotenv
 import os
@@ -23,16 +25,27 @@ from typing import Optional, List
 # Load environment variables from .env file
 load_dotenv()
 
+# Hugging Face API endpoint
+HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
 
-def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, temperature=0.7):
+
+def get_insights(prompt:str, 
+                 api_key: Optional[str] = None, 
+                 provider:str="huggingface", 
+                 model: Optional[str] = None, 
+                 max_tokens:int=1000, 
+                 temperature:float=0.7) ->str:
     """
-    Send a prompt to OpenAI API and retrieve AI-generated insights.
+    Send a prompt to an AI API and retrieve AI-generated insights.
     
     Args:
-        prompt (str): The structured prompt to send to OpenAI
-        api_key (str, optional): OpenAI API key. If None, reads from OPENAI_API_KEY env variable or .env file
-        model (str, optional): OpenAI model to use (default: "gpt-3.5-turbo")
-                              Other options: "gpt-4", "gpt-4-turbo-preview"
+        prompt (str): The structured prompt to send to the API
+        api_key (str, optional): API key for the chosen provider. 
+                                If None, reads from environment variable
+        provider (str, optional): AI provider to use - "huggingface" (default) or "openai"
+        model (str, optional): Model to use. If None, uses provider default:
+                              - Hugging Face: mistralai/Mistral-7B-Instruct-v0.1
+                              - OpenAI: gpt-3.5-turbo
         max_tokens (int, optional): Maximum tokens in the response (default: 1000)
         temperature (float, optional): Response creativity 0.0-1.0 (default: 0.7)
                                       Lower = more focused, Higher = more creative
@@ -41,29 +54,61 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
         str: AI-generated insights as a formatted string
         
     Raises:
-        ValueError: If API key is missing or prompt is empty
+        ValueError: If API key is missing, prompt is empty, or provider is invalid
         Exception: If API call fails (rate limits, network issues, etc.)
     """
     # Validate inputs
     if not prompt or not isinstance(prompt, str) or len(prompt.strip()) == 0:
         raise ValueError("Prompt must be a non-empty string")
     
-    # Get API key
+    provider = provider.lower()
+    if provider not in ["huggingface", "openai"]:
+        raise ValueError("Provider must be either 'huggingface' or 'openai'")
+    
+    env_var = "HUGGINGFACE_API_KEY" if provider == "huggingface" else "OPENAI_API_KEY"
+
+
+    # Get API key based on provider
     if api_key is None:
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv(env_var)
     
     if not api_key:
+        provider_name = "Hugging Face" if provider == "huggingface" else "OpenAI"
         raise ValueError(
-            "OpenAI API key is required. Either pass it as an argument or set the "
-            "OPENAI_API_KEY environment variable. You can also create a .env file "
-            "in your project root with: OPENAI_API_KEY=your-key-here"
+            f"{provider_name} API key is required. Either pass it as an argument or set the "
+            f"{env_var} environment variable. You can also create a .env file "
+            f"in your project root with: {env_var}=your-key-here"
         )
     
+    if provider == "huggingface":
+        return _get_insights_huggingface(prompt, api_key, model, max_tokens, temperature)
+    else:
+        return _get_insights_openai(prompt, api_key, model, max_tokens, temperature)
+
+
+def _get_insights_openai(prompt, api_key, model=None, max_tokens=1000, temperature=0.7):
+    """
+    Send a prompt to OpenAI API and retrieve AI-generated insights.
+    
+    Args:
+        prompt (str): The structured prompt
+        api_key (str): OpenAI API key
+        model (str, optional): Model to use (default: "gpt-3.5-turbo")
+        max_tokens (int, optional): Maximum tokens in response
+        temperature (float, optional): Response creativity level
+        
+    Returns:
+        str: AI-generated insights
+        
+    Raises:
+        Exception: If API call fails
+    """
+    if model is None:
+        model = "gpt-3.5-turbo"
+    
     try:
-        # Initialize OpenAI client
         client = OpenAI(api_key=api_key)
         
-        # Create the chat completion request
         response = client.chat.completions.create(
             model=model,
             messages=[
@@ -85,7 +130,6 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
             temperature=temperature
         )
         
-        # Extract the insights from the response with safety check
         if response.choices and len(response.choices) > 0 and response.choices[0].message.content:
             insights = response.choices[0].message.content.strip()
             return insights
@@ -93,7 +137,6 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
             raise Exception("No content received from OpenAI API. The response was empty or malformed.")
     
     except Exception as e:
-        # Provide helpful error messages for common issues
         error_message = str(e)
         
         if "rate_limit" in error_message.lower():
@@ -115,29 +158,135 @@ def get_insights(prompt, api_key=None, model="gpt-3.5-turbo", max_tokens=1000, t
             raise Exception(f"OpenAI API error: {error_message}")
 
 
-def get_insights_with_history(prompt: str, api_key: Optional[str]=None, conversation_history:Optional[List]=None, model="gpt-3.5-turbo"):
+def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temperature=0.7):
+    """
+    Send a prompt to Hugging Face API and retrieve AI-generated insights.
+    
+    Args:
+        prompt (str): The structured prompt
+        api_key (str): Hugging Face API token
+        model (str, optional): Model to use (default: mistralai/Mistral-7B-Instruct-v0.1)
+        max_tokens (int, optional): Maximum tokens in response
+        temperature (float, optional): Response creativity level
+        
+    Returns:
+        str: AI-generated insights
+        
+    Raises:
+        Exception: If API call fails
+    """
+    if model is None:
+        model = HUGGINGFACE_API_URL
+    
+    # If model is just a name, convert to full URL
+    if not model.startswith("https://"):
+        model = f"https://api-inference.huggingface.co/models/{model}"
+    
+    headers = {
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    system_message = (
+        "You are a data analyst expert. Analyze the provided dataset summary "
+        "and provide clear, actionable insights about trends, patterns, correlations, "
+        "and data quality issues. Structure your response with clear sections and "
+        "bullet points where appropriate."
+    )
+    
+    full_prompt = f"{system_message}\n\nDataset Analysis Request:\n{prompt}"
+    
+    payload = {
+        "inputs": full_prompt,
+        "parameters": {
+            "max_new_tokens": max_tokens,
+            "temperature": temperature
+        }
+    }
+    
+    try:
+        response = requests.post(model, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+        
+        result = response.json()
+        
+        # Handle response format from Hugging Face
+        if isinstance(result, list) and len(result) > 0:
+            if isinstance(result[0], dict):
+                if "generated_text" in result[0]:
+                    insights = result[0]["generated_text"].strip()
+                    # Remove the input prompt from the output if present
+                    if insights.startswith(full_prompt):
+                        insights = insights[len(full_prompt):].strip()
+                    return insights
+                elif "error" in result[0]:
+                    raise Exception(result[0]["error"])
+        
+        raise Exception(f"Unexpected response format from Hugging Face API: {result}")
+    
+    except requests.exceptions.Timeout:
+        raise Exception(
+            "Hugging Face API request timed out. The model may be loading. "
+            "Please try again in a few moments."
+        )
+    except requests.exceptions.ConnectionError as e:
+        raise Exception(
+            f"Failed to connect to Hugging Face API. Please check your internet connection. "
+            f"Original error: {str(e)}"
+        )
+    except requests.exceptions.HTTPError as e:
+        error_message = str(e)
+        if "401" in error_message or "Unauthorized" in error_message:
+            raise Exception(
+                "Invalid Hugging Face API token. Please check your token at "
+                "https://huggingface.co/settings/tokens"
+            )
+        elif "403" in error_message:
+            raise Exception(
+                "Access denied to the specified model. Please ensure you have access to the model."
+            )
+        elif "429" in error_message or "Too Many Requests" in error_message:
+            raise Exception(
+                "Hugging Face API rate limit exceeded. Please wait a few moments and try again."
+            )
+        else:
+            raise Exception(f"Hugging Face API error: {error_message}")
+    except Exception as e:
+        raise Exception(f"Hugging Face API error: {str(e)}")
+
+
+def get_insights_with_history(prompt: str, api_key: Optional[str] = None, 
+                             conversation_history: Optional[List] = None, 
+                             provider: str = "huggingface", 
+                             model: Optional[str] = None):
     """
     Send a prompt with conversation history for follow-up questions.
     
-    This function allows for interactive analysis where you can ask follow-up
-    questions based on previous insights.
+    Note: This feature is primarily designed for OpenAI. Hugging Face support
+    is limited as the API does not maintain conversation history server-side.
     
     Args:
-        prompt (str): The current prompt/question
-        api_key (str, optional): OpenAI API key
+        prompt (str): The current prompt or question
+        api_key (str, optional): API key for the chosen provider
         conversation_history (list, optional): List of previous message dicts
-        model (str, optional): OpenAI model to use
+        provider (str, optional): AI provider - "huggingface" or "openai"
+        model (str, optional): Model to use
         
     Returns:
-        tuple: (insights_str, updated_conversation_history)
+        tuple: (insights_string, updated_conversation_history)
+        
+    Raises:
+        ValueError: If API key is missing or provider is invalid
+        Exception: If API call fails
     """
+
+    env_var = "HUGGINGFACE_API_KEY" if provider == "huggingface" else "OPENAI_API_KEY"
+
     if api_key is None:
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv(env_var)
     
     if not api_key:
-        raise ValueError("OpenAI API key is required.")
+        raise ValueError(f"API key is required. Set {env_var} environment variable.")
     
-    # Initialize conversation history if not provided
     if conversation_history is None:
         conversation_history = [
             {
@@ -149,33 +298,48 @@ def get_insights_with_history(prompt: str, api_key: Optional[str]=None, conversa
             }
         ]
     
-    # Add the new user message
     conversation_history.append({"role": "user", "content": prompt})
     
     try:
-        client = OpenAI(api_key=api_key)
-        
-        response = client.chat.completions.create(
-            model=model,
-            messages=conversation_history
-        )
-        
-        # Safety check before calling strip()
-        if response.choices and len(response.choices) > 0 and response.choices[0].message.content:
-            insights = response.choices[0].message.content.strip()
+        if provider == "openai":
+            if model is None:
+                model = "gpt-3.5-turbo"
             
-            # Add assistant's response to history
-            conversation_history.append({"role": "assistant", "content": insights})
+            client = OpenAI(api_key=api_key)
+            response = client.chat.completions.create(
+                model=model,
+                messages=conversation_history
+            )
             
-            return insights, conversation_history
+            if response.choices and len(response.choices) > 0 and response.choices[0].message.content:
+                insights = response.choices[0].message.content.strip()
+                conversation_history.append({"role": "assistant", "content": insights})
+                return insights, conversation_history
+            else:
+                raise Exception("No content received from OpenAI API.")
+        
         else:
-            raise Exception("No content received from OpenAI API.")
+            # For Hugging Face, construct full conversation context
+            messages_text = ""
+            for msg in conversation_history:
+                if msg["role"] != "system":
+                    messages_text += f"\n{msg['role'].upper()}: {msg['content']}"
+            
+            insights = get_insights(
+                messages_text,
+                api_key=api_key,
+                provider="huggingface",
+                model=model
+            )
+            
+            conversation_history.append({"role": "assistant", "content": insights})
+            return insights, conversation_history
     
     except Exception as e:
-        raise Exception(f"OpenAI API error: {str(e)}")
+        raise Exception(f"Error retrieving insights: {str(e)}")
 
 
-def estimate_cost(prompt:str, model:str="gpt-3.5-turbo"):
+def estimate_cost(prompt: str, provider: str = "huggingface", model: Optional[str] = None):
     """
     Estimate the cost of analyzing a prompt.
     
@@ -184,47 +348,62 @@ def estimate_cost(prompt:str, model:str="gpt-3.5-turbo"):
     
     Args:
         prompt (str): The prompt to estimate cost for
-        model (str): The model being used
+        provider (str): AI provider - "huggingface" or "openai"
+        model (str, optional): The model being used
         
     Returns:
-        dict: Estimated cost information
+        dict: Cost estimation information
     """
-    # Rough token estimation (1 token ≈ 4 characters)
     estimated_input_tokens = len(prompt) // 4
-    estimated_output_tokens = 500  # Typical response length
+    estimated_output_tokens = 500
     
-    # Pricing as of 2025 (subject to change)
-    pricing = {
-        "gpt-3.5-turbo": {"input": 0.0005 / 1000, "output": 0.0015 / 1000},
-        "gpt-4": {"input": 0.03 / 1000, "output": 0.06 / 1000},
-        "gpt-4-turbo-preview": {"input": 0.01 / 1000, "output": 0.03 / 1000}
-    }
+    if provider == "huggingface":
+        return {
+            "provider": "huggingface",
+            "model": model or "mistralai/Mistral-7B-Instruct-v0.1",
+            "estimated_input_tokens": estimated_input_tokens,
+            "estimated_output_tokens": estimated_output_tokens,
+            "estimated_cost_usd": 0.0,
+            "note": "Hugging Face API is completely free with no payment required."
+        }
     
-    if model not in pricing:
-        return {"error": f"Pricing not available for model: {model}"}
+    elif provider == "openai":
+        if model is None:
+            model = "gpt-3.5-turbo"
+        
+        pricing = {
+            "gpt-3.5-turbo": {"input": 0.0005 / 1000, "output": 0.0015 / 1000},
+            "gpt-4": {"input": 0.03 / 1000, "output": 0.06 / 1000},
+            "gpt-4-turbo-preview": {"input": 0.01 / 1000, "output": 0.03 / 1000}
+        }
+        
+        if model not in pricing:
+            return {"error": f"Pricing not available for model: {model}"}
+        
+        input_cost = estimated_input_tokens * pricing[model]["input"]
+        output_cost = estimated_output_tokens * pricing[model]["output"]
+        total_cost = input_cost + output_cost
+        
+        return {
+            "provider": "openai",
+            "model": model,
+            "estimated_input_tokens": estimated_input_tokens,
+            "estimated_output_tokens": estimated_output_tokens,
+            "estimated_cost_usd": round(total_cost, 4),
+            "note": "This is a rough estimate. Actual costs may vary."
+        }
     
-    input_cost = estimated_input_tokens * pricing[model]["input"]
-    output_cost = estimated_output_tokens * pricing[model]["output"]
-    total_cost = input_cost + output_cost
-    
-    return {
-        "model": model,
-        "estimated_input_tokens": estimated_input_tokens,
-        "estimated_output_tokens": estimated_output_tokens,
-        "estimated_cost_usd": round(total_cost, 4),
-        "note": "This is a rough estimate. Actual costs may vary."
-    }
+    else:
+        return {"error": f"Unknown provider: {provider}"}
 
 
-# Example usage and testing
 if __name__ == "__main__":
     """
     Test the analyzer module with a sample prompt.
     This runs only when the script is executed directly.
     """
-    print("Testing analyzer.py module...\n")
+    print("Testing analyzer.py module\n")
     
-    # Sample prompt (similar to what prompt_builder.py would generate)
     sample_prompt = """Analyze the following dataset summary:
 
 Dataset Shape: 20 rows, 9 columns
@@ -250,37 +429,48 @@ Please provide insights on trends, correlations, and data quality."""
     print(sample_prompt)
     print("\n")
     
-    # Check if API key is available
-    api_key = os.getenv("OPENAI_API_KEY")
+    hf_token = os.getenv("HUGGINGFACE_API_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
     
-    if not api_key:
-        print(" OPENAI_API_KEY not found in environment variables")
-        print("\nTo test this module, set your API key in one of these ways:")
-        print("\n1. Environment variable:")
+    if not hf_token and not openai_key:
+        print("No API keys found in environment variables")
+        print("\nTo test this module, set one of these options:")
+        print("\n1. Hugging Face (Recommended - Free):")
+        print("   export HUGGINGFACE_API_KEY=your-token-here")
+        print("   Or create a .env file with: HUGGINGFACE_API_KEY=your-token-here")
+        print("\n2. OpenAI (Paid):")
         print("   export OPENAI_API_KEY=your-key-here")
-        print("\n2. Create a .env file in your project root with:")
-        print("   OPENAI_API_KEY=your-key-here")
-        print("\n3. Pass the API key directly to get_insights():")
-        print("   insights = get_insights(prompt, api_key='your-key-here')")
+        print("   Or create a .env file with: OPENAI_API_KEY=your-key-here")
     else:
-        print(" API key found")
+        if hf_token:
+            print("Hugging Face API token found")
+            provider = "huggingface"
+            api_key = hf_token
+        else:
+            print("OpenAI API key found")
+            provider = "openai"
+            api_key = openai_key
         
-        # Estimate cost
-        cost_info = estimate_cost(sample_prompt)
-        print(f"\nEstimated cost: ${cost_info['estimated_cost_usd']}")
+        cost_info = estimate_cost(sample_prompt, provider=provider)
+        print(f"\nProvider: {cost_info['provider']}")
+        print(f"Model: {cost_info['model']}")
+        print(f"Estimated cost: ${cost_info['estimated_cost_usd']}")
         print(f"Input tokens: ~{cost_info['estimated_input_tokens']}")
         print(f"Output tokens: ~{cost_info['estimated_output_tokens']}")
         
-        # Ask for confirmation
         print("\n" + "=" * 80)
-        user_input = input("Would you like to send this prompt to OpenAI? (y/n): ")
+        user_input = input("Would you like to send this prompt to the API? (y/n): ")
         
         if user_input.lower() == 'y':
             try:
-                print("\nSending request to OpenAI...")
+                print("\nSending request to API...")
                 print("This may take 2-5 seconds\n")
                 
-                insights = get_insights(sample_prompt, api_key=api_key)
+                insights = get_insights(
+                    sample_prompt,
+                    api_key=api_key,
+                    provider=provider
+                )
                 
                 print("=" * 80)
                 print("AI-GENERATED INSIGHTS:")
