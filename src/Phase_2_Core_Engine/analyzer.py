@@ -26,7 +26,13 @@ from typing import Optional, List
 load_dotenv()
 
 # Hugging Face API endpoint
-HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
+# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
+# HUGGINGFACE_API_URL = # Replace this:
+# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
+
+# With this:
+# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-xxl"
+HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/gpt2"
 
 
 def get_insights(prompt:str, 
@@ -196,7 +202,7 @@ def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temp
     full_prompt = f"{system_message}\n\nDataset Analysis Request:\n{prompt}"
     
     payload = {
-        "inputs": full_prompt,
+        "inputs": prompt,
         "parameters": {
             "max_new_tokens": max_tokens,
             "temperature": temperature
