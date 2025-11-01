@@ -32,7 +32,8 @@ load_dotenv()
 
 # With this:
 # HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-xxl"
-HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/gpt2"
+#HUGGINGFACE_API_URL = "https://router.huggingface.co/v1/chat/completions"
+HUGGINGFACE_API_URL ="https://mistralai/Mistral-7B-Instruct-v0.1"
 
 
 def get_insights(prompt:str, 
@@ -182,11 +183,7 @@ def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temp
         Exception: If API call fails
     """
     if model is None:
-        model = HUGGINGFACE_API_URL
-    
-    # If model is just a name, convert to full URL
-    if not model.startswith("https://"):
-        model = f"https://api-inference.huggingface.co/models/{model}"
+        model =  HUGGINGFACE_API_URL #model = "mistralai/Mistral-7B-Instruct-v0.
     
     headers = {
         "Authorization": f"Bearer {api_key}"
@@ -202,11 +199,19 @@ def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temp
     full_prompt = f"{system_message}\n\nDataset Analysis Request:\n{prompt}"
     
     payload = {
-        "inputs": prompt,
-        "parameters": {
-            "max_new_tokens": max_tokens,
-            "temperature": temperature
-        }
+        "messages": [
+            {
+                "role": "system",
+                "content": system_message
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        "model": model.split("/")[-1] if "/" in model else model,
+        "max_tokens": max_tokens,
+        "temperature": temperature
     }
     
     try:
@@ -215,17 +220,23 @@ def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temp
         
         result = response.json()
         
-        # Handle response format from Hugging Face
-        if isinstance(result, list) and len(result) > 0:
-            if isinstance(result[0], dict):
-                if "generated_text" in result[0]:
-                    insights = result[0]["generated_text"].strip()
-                    # Remove the input prompt from the output if present
-                    if insights.startswith(full_prompt):
-                        insights = insights[len(full_prompt):].strip()
-                    return insights
-                elif "error" in result[0]:
-                    raise Exception(result[0]["error"])
+        # Handle chat completion response format
+        if isinstance(result, dict):
+            choices = result.get("choices", [])
+            if choices and len(choices) > 0:
+                message = choices[0].get("message", {})
+                if isinstance(message, dict):
+                    content = message.get("content")
+                    if content:
+                        return content.strip()
+                elif isinstance(message, str):
+                    return message.strip()
+            
+            # Check for error messages
+            error = result.get("error", {})
+            if error:
+                error_msg = error.get("message", str(error))
+                raise Exception(error_msg)
         
         raise Exception(f"Unexpected response format from Hugging Face API: {result}")
     
