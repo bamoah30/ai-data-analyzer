@@ -3,7 +3,6 @@ Test different Hugging Face models for the AI Data Analyzer
 This script allows you to compare different models side by side
 """
 
-from analyzer import get_insights
 from dotenv import load_dotenv
 import os
 

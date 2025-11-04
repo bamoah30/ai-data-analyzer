@@ -26,14 +26,8 @@ from typing import Optional, List
 load_dotenv()
 
 # Hugging Face API endpoint
-# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
-# HUGGINGFACE_API_URL = # Replace this:
-# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.1"
 
-# With this:
-# HUGGINGFACE_API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-xxl"
-#HUGGINGFACE_API_URL = "https://router.huggingface.co/v1/chat/completions"
-HUGGINGFACE_API_URL ="https://mistralai/Mistral-7B-Instruct-v0.1"
+HUGGINGFACE_API_URL = "https://router.huggingface.co/v1/chat/completions"
 
 
 def get_insights(prompt:str, 
@@ -51,7 +45,7 @@ def get_insights(prompt:str,
                                 If None, reads from environment variable
         provider (str, optional): AI provider to use - "huggingface" (default) or "openai"
         model (str, optional): Model to use. If None, uses provider default:
-                              - Hugging Face: mistralai/Mistral-7B-Instruct-v0.1
+                              - Hugging Face: https://router.huggingface.co/v1/chat/completions
                               - OpenAI: gpt-3.5-turbo
         max_tokens (int, optional): Maximum tokens in the response (default: 1000)
         temperature (float, optional): Response creativity 0.0-1.0 (default: 0.7)
@@ -100,7 +94,7 @@ def _get_insights_openai(prompt, api_key, model=None, max_tokens=1000, temperatu
     Args:
         prompt (str): The structured prompt
         api_key (str): OpenAI API key
-        model (str, optional): Model to use (default: "gpt-3.5-turbo")
+        model (str, optional): Model to use (default: "gpt-3.5-turbo", https://router.huggingface.co/v1/chat/completions)
         max_tokens (int, optional): Maximum tokens in response
         temperature (float, optional): Response creativity level
         
@@ -183,7 +177,7 @@ def _get_insights_huggingface(prompt, api_key, model=None, max_tokens=1000, temp
         Exception: If API call fails
     """
     if model is None:
-        model =  HUGGINGFACE_API_URL #model = "mistralai/Mistral-7B-Instruct-v0.
+        model =  HUGGINGFACE_API_URL 
     
     headers = {
         "Authorization": f"Bearer {api_key}"
