@@ -1,16 +1,16 @@
-# ⚙️ Phase 2 – Core Engine
+# Phase 2 – Core Engine
 
 # Project: AI Data Analyzer
 
-> 📌 This phase demonstrates Bernard's ability to build modular AI pipelines using Python, OpenAI API (or Hugging Face API), and pandas. It lays the foundation for CLI and GUI integration in Phase 3.
+> This phase demonstrates Bernard's ability to build modular AI pipelines using Python, OpenAI API (or Hugging Face API), and pandas. It lays the foundation for CLI and GUI integration in Phase 3.
 
-> ✅ Status: Phase 2 in progress ( expected completion by end of week 6).
+> Status: Phase 2 in progress ( expected completion by end of week 6).
 
 This phase builds the technical backbone of the **AI Data Analyzer**. It includes the core logic for ingesting data, generating prompts, and retrieving insights from an AI API (OpenAI or Hugging Face). Each module is designed to be modular, testable, and extensible—laying the groundwork for CLI and GUI integration in later phases.
 
 ---
 
-## 🧩 Modules in This Phase
+## Modules in This Phase
 
 | File                | Purpose                                                         |
 | ------------------- | --------------------------------------------------------------- |
@@ -21,7 +21,7 @@ This phase builds the technical backbone of the **AI Data Analyzer**. It include
 
 ---
 
-## 🔍 Module Details
+## Module Details
 
 ### `data_loader.py`
 
@@ -95,7 +95,7 @@ Sends structured prompts to an AI API and retrieves AI-generated insights. Suppo
 **Configuration:**
 
 - **OpenAI:** Uses `gpt-3.5-turbo` model (configurable)
-- **Hugging Face:** Uses `mistralai/Mistral-7B-Instruct-v0.1` or similar models
+- **Hugging Face:** Uses `MiniMaxAI/MiniMax-M2:novita` or similar models
 - Requires a valid API key
 - Typical response time: 2-5 seconds
 - Returns insights as a formatted string
@@ -117,7 +117,7 @@ insights = get_insights(prompt, api_key=hf_token, provider="huggingface")
 
 ---
 
-## 🛠️ Dependencies
+## Dependencies
 
 Install all required packages with:
 
@@ -132,7 +132,7 @@ pip install pandas openai requests python-dotenv
 - `requests >= 2.25.0` (for Hugging Face API)
 - `python-dotenv >= 0.19.0`
 
-### 🧩 Optional Dependencies (for Future Phases)
+### Optional Dependencies (for Future Phases)
 
 These packages are not required in Phase 2 but will be useful as the project evolves:
 
@@ -150,25 +150,25 @@ pip install python-dotenv streamlit
 
 ---
 
-## 🔐 API Key Setup
+## API Key Setup
 
 To use the AI analysis features, you can choose between **OpenAI** or **Hugging Face** APIs. Both can be set up in similar ways.
 
-### 🚀 Quick Choice Guide
+### Quick Choice Guide
 
 | Feature           | OpenAI                          | Hugging Face              |
 | ----------------- | ------------------------------- | ------------------------- |
-| **Free Tier**     | Limited ($5 trial)              | ✅ Free & Unlimited       |
-| **Card Required** | ✅ Credit/Debit card            | ❌ No card needed         |
+| **Free Tier**     | Limited ($5 trial)              | Free & Unlimited          |
+| **Card Required** | Credit/Debit card               | No card needed            |
 | **Setup Time**    | 5 minutes                       | 2 minutes                 |
-| **Model Quality** | Excellent (gpt-3.5-turbo/gpt-4) | Good (Mistral-7B, others) |
+| **Model Quality** | Excellent (gpt-3.5-turbo/gpt-4) | Good (MiniMax-M2, others) |
 | **Best For**      | Production, high accuracy       | Development, free testing |
 
 ---
 
 ## OpenAI API Setup (Optional)
 
-### ✅ Option 1: Environment Variable (Recommended for CLI)
+### Option 1: Environment Variable (Recommended for CLI)
 
 Set your API key in your terminal session:
 
@@ -183,7 +183,7 @@ import os
 api_key = os.getenv("OPENAI_API_KEY")
 ```
 
-### 🧪 Option 2: Use a `.env` File (Recommended for Development)
+### Option 2: Use a `.env` File (Recommended for Development)
 
 This method is ideal for local development and prevents accidental API key exposure.
 
@@ -224,9 +224,9 @@ pip install python-dotenv
 
 ---
 
-## 🎯 Hugging Face API Setup (Recommended for Free Users)
+## Hugging Face API Setup (Recommended for Free Users)
 
-### ✅ Option 1: Environment Variable (Recommended for CLI)
+### Option 1: Environment Variable (Recommended for CLI)
 
 Set your API key in your terminal session:
 
@@ -241,7 +241,7 @@ import os
 hf_token = os.getenv("HUGGINGFACE_API_KEY")
 ```
 
-### 🧪 Option 2: Use a `.env` File (Recommended for Development)
+### Option 2: Use a `.env` File (Recommended for Development)
 
 This method is ideal for local development and prevents accidental API key exposure.
 
@@ -276,18 +276,18 @@ pip install python-dotenv
 **Get Your Hugging Face API Token:**
 
 1. Visit [Hugging Face](https://huggingface.co/join) to create a free account
-2. **No credit card required** ✅
+2. **No credit card required**
 3. Go to [Settings → Access Tokens](https://huggingface.co/settings/tokens)
 4. Click "New token" and select "Read" access type
 5. Copy your token and paste it into your `.env` file or environment variable
 
-💡 **Tip:** Hugging Face is ideal for development and testing because it's completely free with no payment method required!
+**Tip:** Hugging Face is ideal for development and testing because it's completely free with no payment method required!
 
 ---
 
-## 🚀 How to Run the Core Engine
+## How to Run the Core Engine
 
-### 📁 Step 1: Prepare Your Environment
+### Step 1: Prepare Your Environment
 
 ```bash
 # Clone or navigate to your project directory
@@ -304,7 +304,7 @@ echo "HUGGINGFACE_API_KEY=your-token-here" > .env
 echo "OPENAI_API_KEY=your-key-here" > .env
 ```
 
-### 📊 Step 2: Prepare Sample Data
+### Step 2: Prepare Sample Data
 
 Place a test file in the `sample_data/` folder:
 
@@ -328,7 +328,7 @@ Age,Salary,Department,Experience,Bonus
 42,75000,Marketing,12,4500
 ```
 
-### 🧪 Step 3: Create a Test Script
+### Step 3: Create a Test Script
 
 Create a file named `test_pipeline.py`:
 
@@ -343,17 +343,17 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Step 1: Load your dataset
-print("📁 Loading data...")
+print("Loading data...")
 df = load_file("sample_data/test.csv")
-print(f"✅ Loaded {len(df)} rows and {len(df.columns)} columns\n")
+print(f"Loaded {len(df)} rows and {len(df.columns)} columns\n")
 
 # Step 2: Build a prompt from the dataset
-print("🔨 Building prompt...")
+print("Building prompt...")
 prompt = build_prompt(df)
-print(f"✅ Prompt generated ({len(prompt)} characters)\n")
+print(f"Prompt generated ({len(prompt)} characters)\n")
 
 # Step 3: Get insights from AI API
-print("🤖 Fetching insights from AI API...")
+print("Fetching insights from AI API...")
 
 # Choose your provider:
 # provider = "openai"  # For OpenAI API
@@ -362,35 +362,35 @@ provider = "huggingface"  # For Hugging Face API (Free!)
 api_key = os.getenv("HUGGINGFACE_API_KEY") if provider == "huggingface" else os.getenv("OPENAI_API_KEY")
 
 if not api_key:
-    print(f"❌ Error: API key not found. Check your .env file for {provider.upper()}_API_KEY.")
+    print(f" Error: API key not found. Check your .env file for {provider.upper()}_API_KEY.")
     exit(1)
 
 insights = get_insights(prompt, api_key=api_key, provider=provider)
 
 # Step 4: Display the results
-print("✅ Insights received:\n")
+print("Insights received:\n")
 print(insights)
 ```
 
-### ▶️ Step 4: Run the Test
+### Step 4: Run the Test
 
 ```bash
 python test_pipeline.py
 ```
 
-### 🔍 Step 5: Validate the Output
+### Step 5: Validate the Output
 
 You should see output like:
 
 ```text
-📁 Loading data...
-✅ Loaded 3 rows and 5 columns
+Loading data...
+Loaded 3 rows and 5 columns
 
-🔨 Building prompt...
-✅ Prompt generated (1245 characters)
+Building prompt...
+Prompt generated (1245 characters)
 
-🤖 Fetching insights from AI API...
-✅ Insights received:
+Fetching insights from AI API...
+Insights received:
 
 Top 3 Insights:
 1. The dataset shows a positive correlation between Experience and Salary—employees with more years gain approximately 2.5% salary increase per year.
@@ -405,13 +405,13 @@ Data Quality Notes:
 
 This confirms:
 
-- ✅ Data was successfully loaded
-- ✅ Prompt was correctly generated
-- ✅ AI API returned meaningful insights
+- Data was successfully loaded
+- Prompt was correctly generated
+- AI API returned meaningful insights
 
 ---
 
-## ⚠️ Troubleshooting
+## Troubleshooting
 
 ### API Key Issues
 
@@ -467,24 +467,24 @@ This confirms:
 
 ---
 
-## 📦 What's Next – Phase 3: Interface and Interaction
+## What's Next – Phase 3: Interface and Interaction
 
 In the next phase, Bernard will integrate the core engine into user-facing interfaces that make the tool more accessible and interactive.
 
-### 🧰 Planned Interfaces
+### Planned Interfaces
 
 | Interface Type            | Description                                                               |
 | ------------------------- | ------------------------------------------------------------------------- |
 | CLI (Command Line)        | Use `argparse` to allow users to run the analyzer via terminal commands   |
 | GUI (Graphical Interface) | Use Streamlit to create a browser-based interface for non-technical users |
 
-### 🔗 Integration Goals
+### Integration Goals
 
 - Connect `data_loader.py`, `prompt_builder.py`, and `analyzer.py` into a unified pipeline
 - Allow users to upload files and receive insights without touching the code
 - Maintain modularity so both interfaces use the same backend logic
 
-### 🧠 Strategic Intent
+### Strategic Intent
 
 This phase will demonstrate Bernard's ability to:
 
@@ -494,7 +494,7 @@ This phase will demonstrate Bernard's ability to:
 
 ---
 
-## 💰 Cost Considerations
+## Cost Considerations
 
 ### OpenAI API
 
@@ -511,8 +511,8 @@ Monitor your usage at [OpenAI Usage Dashboard](https://platform.openai.com/usage
 
 The Hugging Face API is **completely free** with generous rate limits:
 
-- **No payment required** ✅
-- **No credit card needed** ✅
+- **No payment required**
+- **No credit card needed**
 - **Unlimited requests** (within fair use policy)
 - **Multiple free models** available (Mistral-7B, Zephyr, and more)
 
@@ -522,7 +522,7 @@ Monitor your usage at [Hugging Face API Dashboard](https://huggingface.co/settin
 
 ---
 
-## 📝 Testing Checklist
+## Testing Checklist
 
 Before moving to Phase 3, verify:
 
@@ -536,6 +536,6 @@ Before moving to Phase 3, verify:
 
 ---
 
-> 🧭 **Phase Summary:** Bernard has built a modular AI engine using Python, pandas, and flexible API support (OpenAI or Hugging Face), with clean architecture and comprehensive documentation. This phase sets the foundation for user-facing interfaces in Phase 3.
+> **Phase Summary:** Bernard has built a modular AI engine using Python, pandas, and flexible API support (OpenAI or Hugging Face), with clean architecture and comprehensive documentation. This phase sets the foundation for user-facing interfaces in Phase 3.
 
-> 🗓️ **Milestone:** Core engine modules implemented and tested. CLI and GUI scaffolding begins in Phase 3.
+> **Milestone:** Core engine modules implemented and tested. CLI and GUI scaffolding begins in Phase 3.
