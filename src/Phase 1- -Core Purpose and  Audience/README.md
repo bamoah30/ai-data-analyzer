@@ -41,6 +41,7 @@ These features form the backbone of the tool and will be expanded in later phase
 
 - **Python** – Core language
 - **OpenAI API** – LLM-powered insights
+- **HuggingFace API** - Free alternative LLM
 - **pandas** – Data manipulation
 - **argparse** – CLI interface
 - **CSV/JSON** – Supported data formats
