@@ -9,21 +9,21 @@ It’s designed to help automate exploratory data analysis and improve my Python
 
 ## 🛠️ Tech Stack
 
-- Python  
-- OpenAI API  
-- Pandas  
+- Python
+- OpenAI and Hugging Face API
+- Pandas
 - CSV/JSON processing
 
 ## 📚 Learning Log
 
-- Week 4: Set up repo and explored OpenAI API  
-- Week 5: Built CSV parser and prompt template  
+- Week 4: Set up repo and explored OpenAI API
+- Week 5: Built CSV parser and prompt template
 - Week 6: Added error handling and CLI interface
 
 ## 🚀 Next Steps
 
-- Add Streamlit interface  
-- Deploy demo on Streamlit Cloud  
+- Add Streamlit interface
+- Deploy demo on Streamlit Cloud
 - Write blog post about lessons learned
 
 ## 🦄 Why It Matters
