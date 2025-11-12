@@ -18,8 +18,9 @@ Key features:
 import os
 import json
 import requests
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 from openai import OpenAI
+from openai.types.chat import ChatCompletionMessageParam
 from dotenv import load_dotenv
 
 
@@ -450,7 +451,8 @@ def get_insights_with_history(
             client = OpenAI(api_key=api_key)
             response = client.chat.completions.create(
                 model=model,
-                messages=conversation_history
+                messages =conversation_history, # type : ignore
+                temperature=0.7
             )
 
             if response.choices and len(response.choices) > 0:
