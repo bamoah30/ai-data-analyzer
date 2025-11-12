@@ -38,7 +38,7 @@
 ### 🧪 Example Usage
 
 ```bash
-python main.py --file sample_data/test.csv --model distilbert
+python main.py --file sample_data/test.csv --provider huggingface
 ```
 
 ### 🧠 Argparse Setup
