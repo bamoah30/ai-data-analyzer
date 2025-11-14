@@ -113,16 +113,8 @@ with st.sidebar:
     
     # Model selection based on provider
     if provider == "huggingface":
-        model_options = [
-            "MiniMaxAI/MiniMax-M2:novita",
-            "meta-llama/Llama-2-7b",
-            "mistralai/Mistral-7B",
-        ]
-        model = st.selectbox(
-            "Select Model:",
-            options=model_options,
-            help="Choose a Hugging Face model for analysis"
-        )
+        model = "MiniMaxAI/MiniMax-M2:novita"
+        st.info("📌 Using Novita (MiniMax-M2) model for analysis")
     else:
         model_options = [
             "gpt-3.5-turbo",
@@ -268,7 +260,7 @@ with col1:
 
 with col2:
     if st.session_state.uploaded_df is not None:
-        st.markdown("### 🔍 Analysis & Insights")
+        st.markdown("### 📈 Analysis & Insights")
         
         # Check if API key is available
         if not api_key_from_env:
@@ -285,7 +277,7 @@ with col2:
                 type="primary"
             ):
                 try:
-                    with st.spinner("🔄 Generating insights... This may take 2-5 seconds"):
+                    with st.spinner("📄 Generating insights... This may take 2-5 seconds"):
                         # Build prompt
                         if include_sample:
                             prompt = build_prompt_with_sample(
