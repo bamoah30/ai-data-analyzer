@@ -6,7 +6,7 @@ This phase defines the strategic foundation of the **AI Data Analyzer** project.
 
 ## 🎯 Core Purpose
 
-**AI Data Analyzer** is a Python-based tool that uses the OpenAI API to automate exploratory data analysis (EDA) on CSV/Json, and Excel files.  
+**AI Data Analyzer** is a Python-based tool that uses the HuggingFace API and OpenAI API to automate exploratory data analysis (EDA) on CSV/Json, and Excel files.  
 It’s designed to accelerate Bernard’s mastery of Python, API integration, and intelligent data workflows—while serving as a public proof-of-concept in his 24-month AI Engineering roadmap.
 
 ---
@@ -19,19 +19,19 @@ This project is built for:
 - **AI learners** seeking a beginner-friendly template for EDA automation
 - **Engineers** interested in modular, CLI-driven tools that integrate LLMs
 
-Each audience segment reflects Bernard’s transformation from Mechanical Engineer to Futuristic Unicorn Engineer.
+Each audience segment reflects Bernard’s transformation from Mechanical Engineer to a fullstack AI + Robotics Engineer.
 
 ---
 
 ## 🧩 MVP Features (Minimum Viable Product)
 
-| Feature                 | Description                                                |
-| ----------------------- | ---------------------------------------------------------- |
-| CSV/Excel/JSON Upload   | Load and parse tabular or structured data from local files |
-| Prompt Template Builder | Generate structured prompts for OpenAI API                 |
-| Insight Generation      | Use LLM to summarize trends, anomalies, and patterns       |
-| CLI Interface           | Run analysis from terminal with arguments                  |
-| Error Handling          | Graceful fallback for malformed inputs or API issues       |
+| Feature                 | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| CSV/Excel/JSON Upload   | Load and parse tabular or structured data from local files     |
+| Prompt Template Builder | Generate structured prompts for HuggingFace API and OpenAI API |
+| Insight Generation      | Use LLM to summarize trends, anomalies, and patterns           |
+| CLI Interface           | Run analysis from terminal with arguments                      |
+| Error Handling          | Graceful fallback for malformed inputs or API issues           |
 
 These features form the backbone of the tool and will be expanded in later phases.
 
@@ -44,6 +44,7 @@ These features form the backbone of the tool and will be expanded in later phase
 - **HuggingFace API** - Free alternative LLM
 - **pandas** – Data manipulation
 - **argparse** – CLI interface
+- **streamlit** - GUI interface
 - **CSV/JSON** – Supported data formats
 
 ---
