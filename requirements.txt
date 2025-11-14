@@ -1,2 +1,5 @@
 openai
 pandas
+streamlit
+argparse
+
