@@ -168,13 +168,18 @@ with st.sidebar:
         st.success(f"✓ {provider.title()} API key loaded from environment")
     else:
         st.warning(f"⚠️ No {provider.title()} API key in environment")
-        api_key_input = st.text_input(
-            f"Enter {provider.title()} API Key:",
-            type="password",
-            help=f"Provide your {provider.title()} API key here"
-        )
-        if api_key_input:
-            api_key_from_env = api_key_input
+    
+    api_key_input = st.text_input(
+        f"Enter {provider.title()} API Key:",
+        type="password",
+        help=f"Provide your {provider.title()} API key here"
+    )
+    
+    if api_key_input:
+        api_key_from_env = api_key_input
+    
+    if not api_key_from_env:
+        st.error(f"❌ API key is required to proceed")
 
 # ============================================================================
 # MAIN CONTENT
