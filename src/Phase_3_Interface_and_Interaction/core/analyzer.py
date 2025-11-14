@@ -102,7 +102,8 @@ def _query_huggingface(payload: Dict, api_key: str, timeout: int = 30) -> str:
         RuntimeError: If the API request fails or returns invalid data
     """
     headers = {
-        "Authorization": f"Bearer {api_key}"
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
     }
 
     try:
@@ -274,8 +275,9 @@ def _get_insights_huggingface(
         "bullet points where appropriate."
     )
 
-    # Construct the API request payload
+    # Construct the API request payload - FIXED FORMAT
     payload = {
+        "model": model if model else "MiniMaxAI/MiniMax-M2:novita",
         "messages": [
             {
                 "role": "system",
@@ -289,14 +291,6 @@ def _get_insights_huggingface(
         "max_tokens": max_tokens,
         "temperature": temperature
     }
-
-    # Add model if specified, otherwise let router decide
-    if model:
-        # Extract model name if full path provided
-        payload["model"] = model.split("/")[-1] if "/" in model else model
-    else:
-        # Router will select an appropriate model automatically
-        payload["model"] = "MiniMaxAI/MiniMax-M2:novita"
 
     # Send request and handle response
     try:
@@ -451,7 +445,7 @@ def get_insights_with_history(
             client = OpenAI(api_key=api_key)
             response = client.chat.completions.create(
                 model=model,
-                messages =conversation_history, # type : ignore
+                messages=conversation_history,  # type: ignore
                 temperature=0.7
             )
 
