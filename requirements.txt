@@ -2,4 +2,7 @@ openai
 pandas
 streamlit
 argparse
+python-dotenv
+requests
+
 
