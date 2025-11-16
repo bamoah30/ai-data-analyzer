@@ -16,9 +16,9 @@ It’s designed to help automate exploratory data analysis and improve my Python
 
 ## Learning Log
 
-- Week 4: Set up repo and explored OpenAI API
-- Week 5: Built data loader, prompt template and analyzer modules
-- Week 6: CLI interface and Streamlit interface
+- Set up repo and explored OpenAI API
+- Built data loader, prompt template and analyzer modules
+- CLI interface and Streamlit interface
 - Add Streamlit interface
 - Deploy demo on Streamlit Cloud
 - Write blog post about lessons learned
