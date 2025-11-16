@@ -1,17 +1,17 @@
-# 📘 Phase 1 – Core Purpose and Audience
+# Phase 1 – Core Purpose and Audience
 
 This phase defines the strategic foundation of the **AI Data Analyzer** project. It clarifies the tool’s purpose, target audience, and minimum viable features—setting the tone for all future development.
 
 ---
 
-## 🎯 Core Purpose
+## Core Purpose
 
-**AI Data Analyzer** is a Python-based tool that uses the HuggingFace API and OpenAI API to automate exploratory data analysis (EDA) on CSV/Json, and Excel files.  
+**AI Data Analyzer** is a Python-based tool that uses the HuggingFace API and OpenAI API to automate exploratory data analysis (EDA) on CSV, Json, and Excel files.  
 It’s designed to accelerate Bernard’s mastery of Python, API integration, and intelligent data workflows—while serving as a public proof-of-concept in his 24-month AI Engineering roadmap.
 
 ---
 
-## 👥 Target Audience
+## Target Audience
 
 This project is built for:
 
@@ -23,7 +23,7 @@ Each audience segment reflects Bernard’s transformation from Mechanical Engine
 
 ---
 
-## 🧩 MVP Features (Minimum Viable Product)
+## MVP Features (Minimum Viable Product)
 
 | Feature                 | Description                                                    |
 | ----------------------- | -------------------------------------------------------------- |
@@ -31,13 +31,13 @@ Each audience segment reflects Bernard’s transformation from Mechanical Engine
 | Prompt Template Builder | Generate structured prompts for HuggingFace API and OpenAI API |
 | Insight Generation      | Use LLM to summarize trends, anomalies, and patterns           |
 | CLI Interface           | Run analysis from terminal with arguments                      |
-| Error Handling          | Graceful fallback for malformed inputs or API issues           |
+| Streamlit Interface     | Run analysis using stramlit GUI                                |
 
 These features form the backbone of the tool and will be expanded in later phases.
 
 ---
 
-## 🛠️ Tech Stack (Phase 1–2)
+## Tech Stack (Phase 1–2)
 
 - **Python** – Core language
 - **OpenAI API** – LLM-powered insights
@@ -45,10 +45,10 @@ These features form the backbone of the tool and will be expanded in later phase
 - **pandas** – Data manipulation
 - **argparse** – CLI interface
 - **streamlit** - GUI interface
-- **CSV/JSON** – Supported data formats
+- **CSV/JSON/EXCEL** – Supported data formats
 
 ---
 
-## 🧠 Strategic Notes
+## Strategic Notes
 
 This phase is not just technical—it’s personal. It reflects Bernard’s commitment to clarity, modularity, and public learning. Every decision here is intentional, laying the groundwork for a recruiter-friendly, future-proof portfolio.

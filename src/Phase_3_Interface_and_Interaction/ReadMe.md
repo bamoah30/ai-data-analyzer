@@ -2,7 +2,7 @@
 
 > This phase demonstrates Bernard’s ability to build user-facing interfaces around a modular AI engine powered by Hugging Face. It focuses on accessibility, usability, and real-world deployment readiness.
 
-> Status: Phase 3 in progress (as of Week 6 of my journey).
+> Status: Phase 3 Completed in Week 6.
 
 ---
 
@@ -144,4 +144,4 @@ This phase demonstrates Bernard’s ability to:
 
 > Phase Summary: Bernard is transforming a modular AI engine into a user-facing product powered by Hugging Face. By integrating CLI and GUI interfaces, he’s making the tool accessible, testable, and ready for real-world use.
 
-> Milestone: CLI and GUI scaffolding underway. Hugging Face integration in progress. Public demo planned for Week 7.
+> Milestone: CLI and GUI scaffolding underway. Hugging Face integration in progress. Public demo planned for the end of week 6.

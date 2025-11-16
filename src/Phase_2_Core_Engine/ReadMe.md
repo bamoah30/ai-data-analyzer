@@ -4,7 +4,7 @@
 
 > This phase demonstrates Bernard's ability to build modular AI pipelines using Python, OpenAI API (or Hugging Face API), and pandas. It lays the foundation for CLI and GUI integration in Phase 3.
 
-> Status: Phase 2 in progress ( expected completion by end of week 6).
+> Status: Phase 2 Completed.
 
 This phase builds the technical backbone of the **AI Data Analyzer**. It includes the core logic for ingesting data, generating prompts, and retrieving insights from an AI API (OpenAI or Hugging Face). Each module is designed to be modular, testable, and extensible—laying the groundwork for CLI and GUI integration in later phases.
 
@@ -55,7 +55,7 @@ Converts DataFrame metadata into structured prompts for AI API analysis.
 
 **What It Does:**
 
-- Generates statistical summaries using `df.describe()`
+- Generates statistical summaries
 - Extracts column names and data types
 - Counts missing values per column
 - Formats all metadata into a readable, structured prompt
@@ -96,7 +96,7 @@ Sends structured prompts to an AI API and retrieves AI-generated insights. Suppo
 
 - **OpenAI:** Uses `gpt-3.5-turbo` model (configurable)
 - **Hugging Face:** Uses `MiniMaxAI/MiniMax-M2:novita` or similar models
-- Requires a valid API key
+- Requires a valid API key or token
 - Typical response time: 2-5 seconds
 - Returns insights as a formatted string
 
